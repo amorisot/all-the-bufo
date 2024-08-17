@@ -6,7 +6,7 @@ import numpy as np
 def main():
     # grab all the filenames in the all-the-bufo directory
     bufos = []
-    for filename in os.listdir('all-the-bufo'):
+    for filename in sorted(os.listdir('all-the-bufo')):
         with open(f'all-the-bufo/{filename}', 'rb') as f:
             bufos.append((f'all-the-bufo/{filename}', f.read()))
 

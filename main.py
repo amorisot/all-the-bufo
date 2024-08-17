@@ -8,11 +8,12 @@ import numpy as np
 
 from PIL import Image
 from fastapi import FastAPI, Form
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 co = cohere.Client(os.environ['COHERE_API_KEY'])
 app = FastAPI()
-bufos = os.listdir('all-the-bufo')
+bufos = sorted(os.listdir('all-the-bufo'))
 embeddings = np.load(open('embufo.npy', 'rb'), allow_pickle=True)
 app.add_middleware(
     CORSMiddleware,
@@ -21,6 +22,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+with open("index.html") as f:
+    index_html = f.read()
+
+
+# just display index.html, located in the same directory as main.py
+@app.get("/")
+async def root():
+    return HTMLResponse(content=index_html, status_code=200)
+
 
 @app.post("/get_images/")
 async def get_images(query: str = Form(...)):
@@ -65,4 +75,4 @@ async def get_images(query: str = Form(...)):
     return {"images": images}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="100.69.202.22", port=8000)
