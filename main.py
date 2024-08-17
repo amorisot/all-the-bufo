@@ -32,8 +32,18 @@ async def root():
 
 
 @app.post("/get_images/")
-async def get_images(query: str = Form(...)):
+async def get_images(query: str = Form(None)):
     print(query)
+    # in case of empty query, return a shrug bufo
+    if not query:
+        name = "bufo-shrug.png"
+        image_path = f'all-the-bufo/{name}'
+        image = Image.open(image_path)
+        image_byte_arr = BytesIO()
+        image.save(image_byte_arr, format=image.format)
+        image_byte_arr = image_byte_arr.getvalue()
+        image_base64 = str(base64.b64encode(image_byte_arr), 'utf-8')
+        return {"images": [image_base64], "names": [name]}
     search_embedding = co.embed(texts=[query], model='embed-english-v3.0', input_type='search_query').embeddings[0]
     scores = np.dot(embeddings, np.array(search_embedding))
 

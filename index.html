@@ -6,12 +6,12 @@
 <body>
     <h1>semantic bufo</h1>
     <form action="/get_images/" method="post">
-        <label for="query">query</label>
+        <label for="query"></label>
         <input type="text" id="query" name="query"><br><br>
-        <button type="submit">Submit</button>
+        <button type="submit">bufo</button>
     </form>
     <div id="results" style="display: none;">
-        <h2>Results</h2>
+        <h2>results</h2>
             <div id="result-images"></div>
     </div>
     <p id="bufo_name"></p>
@@ -34,6 +34,7 @@
                 const data = await response.json();
                 // Clear previous results
                 resultImagesDiv.innerHTML = '';
+                bufo_name.textContent = '';
                 data.images.forEach(function(image, index) {
                     const img = document.createElement('img');
                     img.src = `data:image/jpeg;base64,${image}`;
@@ -47,6 +48,24 @@
                 console.error('Error fetching data:', error);
             }
         });
+    
+        function setEmojiAsFavicon(emoji) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.font = '54px serif';
+            ctx.fillText(emoji, 0, 52);
+            
+            const link = document.createElement('link');
+            link.rel = 'icon';
+            link.href = canvas.toDataURL();
+            document.head.appendChild(link);
+        }
+
+        // Usage:
+        setEmojiAsFavicon('🐸');
     </script>
 </body>
 </html>
