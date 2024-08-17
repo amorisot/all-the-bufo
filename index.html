@@ -14,11 +14,13 @@
         <h2>Results</h2>
             <div id="result-images"></div>
     </div>
+    <p id="bufo_name"></p>
 
     <script>
         const form = document.querySelector('form');
         const queryInput = document.querySelector('#query');
         const resultImagesDiv = document.querySelector('#result-images');
+        const bufo_name = document.querySelector('#bufo_name');
 
         form.addEventListener('submit', async event => {
             event.preventDefault(); // Prevent form submission
@@ -32,9 +34,12 @@
                 const data = await response.json();
                 // Clear previous results
                 resultImagesDiv.innerHTML = '';
-                data.images.forEach(image => {
+                data.images.forEach(function(image, index) {
                     const img = document.createElement('img');
                     img.src = `data:image/jpeg;base64,${image}`;
+                    img.addEventListener('click', function() {
+                        bufo_name.textContent = `${data.names[index]}`;
+                    });
                     resultImagesDiv.appendChild(img);
                 });
                 document.getElementById('results').style.display = 'block';
