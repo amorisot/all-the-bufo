@@ -9,3 +9,5 @@ All the bufo emojis you could possibly ask for. Vetted to be safe for work but u
 ### Semantically searching for bufo
 
 There are many bufos and they are hard to parse through. We embedded the corpus of bufo using cohere embeddings, to facilitate discovery.
+
+Running is just `python3.11 main.py`

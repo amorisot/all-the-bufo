@@ -49,17 +49,28 @@ async def get_images(query: str = Form(None)):
 
     images, names = [], []
     for i in np.argsort(scores)[::-1][:8]:
-        image_path = f'all-the-bufo/{bufos[i]}'
-        image = Image.open(image_path)
-        image_byte_arr = BytesIO()
-        image.save(image_byte_arr, format=image.format)
-        image_byte_arr = image_byte_arr.getvalue()
-        image_base64 = str(base64.b64encode(image_byte_arr), 'utf-8')
-        images.append(image_base64)
-        names.append(bufos[i])
+        if bufos[i].endswith(".gif"):
+            # deal with gifs
+            gif_path = f'all-the-bufo/{bufos[i]}'
+            with open(gif_path, "rb") as gif_file:
+                gif_data = gif_file.read()
+                gif_base64 = str(base64.b64encode(gif_data), 'utf-8')
+            images.append(gif_base64)
+            names.append(bufos[i])
+        else:    
+            image_path = f'all-the-bufo/{bufos[i]}'
+            image = Image.open(image_path)
+            image_byte_arr = BytesIO()
+            image.save(image_byte_arr, format=image.format)
+            image_byte_arr = image_byte_arr.getvalue()
+            image_base64 = str(base64.b64encode(image_byte_arr), 'utf-8')
+            images.append(image_base64)
+            names.append(bufos[i])
 
     return {"images": images, "names": names}
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="100.69.202.22", port=8000)
+    ## to run locally:
+    # uvicorn.run(app, host="localhost", port=8000)
